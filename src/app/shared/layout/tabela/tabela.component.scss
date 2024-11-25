@@ -1,0 +1,39 @@
+th:first-child {
+  width: 70px;
+}
+
+th:last-child{
+  width: 190px;
+  margin-right: 5px;
+}
+
+.gap{
+  margin-left: 5px;
+}
+
+/* Estilização da barra de rolagem */
+.table-responsive {
+  scrollbar-width: thin; /* Para navegadores Firefox */
+  scrollbar-color: #ccc transparent; /* Cor da barra e fundo no Firefox */
+}
+
+/* Estilos para navegadores baseados no WebKit (Chrome, Edge, Safari) */
+.table-responsive::-webkit-scrollbar {
+  width: 10px; /* Largura da barra vertical */
+  height: 10px; /* Altura da barra horizontal */
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: transparent; /* Fundo da trilha */
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #aaa; /* Cor da barra */
+  border-radius: 10px; /* Deixa a barra arredondada */
+  border: 2px solid transparent; /* Espaço entre barra e trilha */
+  background-clip: content-box; /* Faz o espaço no border funcionar */
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: #888; /* Cor ao passar o mouse */
+}

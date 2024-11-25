@@ -1,0 +1,117 @@
+<app-conteudo>
+  <div class="card">
+    <div class="card-body">
+      <div class="container">
+        <form
+          [formGroup]="formulario"
+          (ngSubmit)="onSubmit()"
+          class="row align-items-center"
+        >
+          <div class="col-auto">
+            <label for="descricao" class="col-form-label fw-bold"
+              >Cadastrar Assunto:</label
+            >
+          </div>
+          <div class="col">
+            <input
+              id="descricao"
+              type="text"
+              class="form-control"
+              formControlName="descricao"
+              [ngClass]="{
+                'is-invalid':
+                  formulario.get('descricao')?.invalid &&
+                  formulario.get('descricao')?.touched
+              }"
+            />
+            <div
+              *ngIf="
+                formulario.get('descricao')?.touched &&
+                formulario.get('descricao')?.invalid
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="formulario.get('descricao')?.errors?.required">
+                O campo descricao é obrigatório.
+              </div>
+              <div *ngIf="formulario.get('descricao')?.errors?.maxlength">
+                O descricao não pode ter mais de 40 caracteres.
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="formulario.invalid"
+            >
+              Enviar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <app-tabela
+    [cabecalho]="['codAs', 'descricao']"
+    [dados]="assunto"
+    [titulo]="'Descrições Cadastrados'"
+    (excluir)="excluirAssunto($event)"
+    (editar)="editarAssunto($event)"
+    (filtroTabela)="filtrarAssunto($event)"
+  ></app-tabela>
+
+  <!-- Modal de Edição -->
+  <div
+    class="modal fade"
+    id="modalEdicao"
+    tabindex="-1"
+    aria-labelledby="modalEdicaoLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEdicaoLabel">Editar Assunto</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formularioEdicao">
+            <div class="mb-3">
+              <label for="descricaoEdicao" class="form-label">Descricao do Assunto</label>
+              <input
+                type="text"
+                id="descricaoEdicao"
+                class="form-control"
+                formControlName="descricao"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="formularioEdicao.invalid"
+            (click)="salvarEdicao()"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-conteudo>

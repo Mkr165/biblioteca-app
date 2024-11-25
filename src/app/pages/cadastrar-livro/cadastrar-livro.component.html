@@ -1,0 +1,168 @@
+<app-conteudo>
+  <div class="card">
+    <div class="card-body">
+      <div class="container text-end">
+        <!-- Botão para abrir o modal de cadastro -->
+        <button type="button" class="btn btn-primary" (click)="abrirModal()">
+          Cadastrar Livro
+        </button>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <app-tabela
+    [cabecalho]="['codl', 'titulo', 'editora', 'anoPublicacao', 'preco', 'formaCompra', 'autores', 'assuntos']"
+    [dados]="livros"
+    [titulo]="'Livros Cadastrados'"
+    (excluir)="excluirLivro($event)"
+    (editar)="editarLivro($event)"
+    (filtroTabela)="filtrarLivros($event)"
+  ></app-tabela>
+
+  <!-- Modal Compartilhado -->
+  <div
+    class="modal fade"
+    id="modalLivro"
+    tabindex="-1"
+    aria-labelledby="modalLivroLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLivroLabel">
+            {{ isEdit ? 'Editar Livro' : 'Cadastrar Livro' }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formularioLivro">
+            <!-- Campos padrão -->
+            <div class="mb-3">
+              <label for="titulo" class="form-label">Título</label>
+              <input
+                type="text"
+                id="titulo"
+                class="form-control"
+                formControlName="titulo"
+                [ngClass]="{
+                  'is-invalid': formularioLivro.get('titulo')?.invalid &&
+                  formularioLivro.get('titulo')?.touched
+                }"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="editora" class="form-label">Editora</label>
+              <input
+                type="text"
+                id="editora"
+                class="form-control"
+                formControlName="editora"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="anoPublicacao" class="form-label">Ano de Publicação</label>
+              <input
+                type="text"
+                id="anoPublicacao"
+                class="form-control"
+                formControlName="anoPublicacao"
+                [ngClass]="{
+                  'is-invalid': formularioLivro.get('anoPublicacao')?.invalid &&
+                  formularioLivro.get('anoPublicacao')?.touched
+                }"
+              />
+              <div
+                *ngIf="
+                  formularioLivro.get('anoPublicacao')?.invalid &&
+                  formularioLivro.get('anoPublicacao')?.touched
+                "
+                class="text-danger"
+              >
+                O ano deve ser válido (4 dígitos) e entre 1900 e {{ anoAtual }}.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="preco" class="form-label">Preço (R$)</label>
+              <input
+                type="text"
+                id="preco"
+                class="form-control"
+                mask="separator.2"
+                prefix="R$ "
+                thousandSeparator="."
+                decimalMarker=","
+                formControlName="preco"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="formaCompra" class="form-label">Forma de Compra</label>
+              <select
+                id="formaCompra"
+                class="form-select"
+                formControlName="formaCompra"
+              >
+                <option value="" disabled>Selecione...</option>
+                <option *ngFor="let forma of formasCompra" [value]="forma">
+                  {{ forma }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Seção de Autores -->
+            <div class="mb-3">
+              <label for="autores" class="form-label">Autores</label>
+              <select
+                id="autores"
+                class="form-select"
+                formControlName="autores"
+                multiple
+              >
+                <option *ngFor="let autor of autores" [value]="autor.codAu">
+                  {{ autor.nome }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Seção de Assuntos -->
+            <div class="mb-3">
+              <label for="assuntos" class="form-label">Assuntos</label>
+              <select
+                id="assuntos"
+                class="form-select"
+                formControlName="assuntos"
+                multiple
+              >
+                <option *ngFor="let assunto of assuntos" [value]="assunto.codAs">
+                  {{ assunto.descricao }}
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="formularioLivro.invalid"
+            (click)="salvar()"
+          >
+            {{ isEdit ? 'Salvar Alterações' : 'Cadastrar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-conteudo>

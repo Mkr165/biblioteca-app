@@ -1,0 +1,117 @@
+<app-conteudo>
+  <div class="card">
+    <div class="card-body">
+      <div class="container">
+        <form
+          [formGroup]="formulario"
+          (ngSubmit)="onSubmit()"
+          class="row align-items-center"
+        >
+          <div class="col-auto">
+            <label for="nome" class="col-form-label fw-bold"
+              >Cadastrar Autor:</label
+            >
+          </div>
+          <div class="col">
+            <input
+              id="nome"
+              type="text"
+              class="form-control"
+              formControlName="nome"
+              [ngClass]="{
+                'is-invalid':
+                  formulario.get('nome')?.invalid &&
+                  formulario.get('nome')?.touched
+              }"
+            />
+            <div
+              *ngIf="
+                formulario.get('nome')?.touched &&
+                formulario.get('nome')?.invalid
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="formulario.get('nome')?.errors?.required">
+                O campo nome é obrigatório.
+              </div>
+              <div *ngIf="formulario.get('nome')?.errors?.maxlength">
+                O nome não pode ter mais de 40 caracteres.
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="formulario.invalid"
+            >
+              Enviar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <app-tabela
+    [cabecalho]="['codAu', 'nome']"
+    [dados]="autores"
+    [titulo]="'Autores Cadastrados'"
+    (excluir)="excluirAutor($event)"
+    (editar)="editarAutor($event)"
+    (filtroTabela)="filtrarAutor($event)"
+  ></app-tabela>
+
+  <!-- Modal de Edição -->
+  <div
+    class="modal fade"
+    id="modalEdicao"
+    tabindex="-1"
+    aria-labelledby="modalEdicaoLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEdicaoLabel">Editar Autor</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formularioEdicao">
+            <div class="mb-3">
+              <label for="nomeEdicao" class="form-label">Nome do Autor</label>
+              <input
+                type="text"
+                id="nomeEdicao"
+                class="form-control"
+                formControlName="nome"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="formularioEdicao.invalid"
+            (click)="salvarEdicao()"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-conteudo>
